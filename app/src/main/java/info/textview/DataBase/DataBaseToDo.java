@@ -73,7 +73,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
                 c.moveToNext();
             }
         }
-        db.close();
+
         return arrTblNames;
     }
 
@@ -93,7 +93,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
                         COLUMN_TIME_INTEGER + " integer, " +
                         COLUMN_IS_DONE + " integer);");
 
-        db.close();
+
     }
 
     public void newTable(String name) {
@@ -107,7 +107,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
                         COLUMN_TIME_INTEGER + " integer, " +
                         COLUMN_IS_DONE + " integer);");
 
-        db.close();
+
     }
 
     /********
@@ -119,7 +119,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXIST " + DATABASE_NAME);
         onCreate(db);
-        db.close();
+
 
     }
 
@@ -136,7 +136,6 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
         db.insert(TABLE_TODO_APP, null, values);
 
-        db.close();
 
 
     }
@@ -151,7 +150,6 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
         db.update(TABLE_TODO_APP, values, DATABASE_ID + " = "+ indexPosition, null);
 
-        db.close();
 
 
     }
@@ -164,7 +162,6 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
         db.update(TABLE_TODO_APP, values, DATABASE_ID + " = "+ indexPosition, null);
 
-        db.close();
 
     }
 
@@ -177,7 +174,6 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
         db.update(TABLE_TODO_APP, values, DATABASE_ID + " = "+ indexPosition, null);
 
-        db.close();
 
     }
 
@@ -203,8 +199,6 @@ public class DataBaseToDo extends SQLiteOpenHelper {
                 i++;
             }
         }
-        cursor.close();
-        db.close();
 
 
         return list;
@@ -234,7 +228,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         }
-        db.close();
+
         return cursor;
 
 
@@ -260,6 +254,18 @@ public class DataBaseToDo extends SQLiteOpenHelper {
         return word;
     }
 
+    public int sumColumn(){
+
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT sum(" + COLUMN_TIME_INTEGER + ") " + "FROM " + TABLE_TODO_APP, null);
+        if(cursor.moveToFirst())
+        {
+            return cursor.getInt(0);
+        }
+
+        return 0;
+    }
+
     public String getColumnTitle() {
         return COLUMN_TITLE;
     }
@@ -274,6 +280,8 @@ public class DataBaseToDo extends SQLiteOpenHelper {
     public String getColumnTimeInteger() {
         return COLUMN_TIME_INTEGER;
     }
+
+
 
 }
 

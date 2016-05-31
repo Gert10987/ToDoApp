@@ -10,4 +10,6 @@
     <string name="alertMessage">Czy zadanie jest wykoane?</string>
     <string name="nothingDeleted">Nie usunieto</string>
     <string name="alertMessageWhenDeleteRow">Czy usunac zadanie?</string>
+    <string name="taskNotRunning">Zadanie nie rozpoczete</string>
+    <string name="alertMessageWhenStartTask">Czy rozpoczac zadanie ?</string>
 </resources>

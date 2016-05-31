@@ -17,9 +17,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import info.textview.DataBase.DataBaseToDo;
+
 
 
 public class SecondActivity extends AppCompatActivity {
@@ -51,6 +57,8 @@ public class SecondActivity extends AppCompatActivity {
         setListWithDataCursor();
         listViewListener();
         buttonViewListner();
+        getSumColumnTimeInteger();
+
 
 
     }
@@ -61,27 +69,19 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (listWithData.isEnabled()) {
+                positionInListView = parent.getItemIdAtPosition(position);
+                setUpAlertDialogWhenStartTask();
 
-                    chronometrStartCounting();
-                    positionInListView = parent.getItemIdAtPosition(position);
-                    Log.v("POSTION_TAG", String.valueOf(positionInListView));
-                    listWithData.setEnabled(false);
-                } else {
-
-                    Toast.makeText(getApplicationContext(), R.string.ListViewIsEnabled, Toast.LENGTH_SHORT).show();
-
-                }
 
 
             }
         });
 
-        listWithData.setOnLongClickListener(new View.OnLongClickListener() {
+        listWithData.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                setUpAlertDialogWhenDelete(v.getId());
+                setUpAlertDialogWhenDelete(parent.getItemIdAtPosition(position));
 
                 return true;
             }
@@ -109,7 +109,7 @@ public class SecondActivity extends AppCompatActivity {
 
         chronometer.stop();
 
-        textView.setText(getChronometerValue());
+       // textView.setText(getChronometerValue());
 
     }
 
@@ -259,7 +259,8 @@ public class SecondActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
 
-               deleteRowFromDataBase(positionInListView);
+                deleteRowFromDataBase(positionInListView);
+                resetActivity();
 
             }
         });
@@ -271,6 +272,46 @@ public class SecondActivity extends AppCompatActivity {
         alertDialog.show();
 
     }
+
+    private void setUpAlertDialogWhenStartTask() {
+
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                boolean isStaring = false;
+                isStartingTask(isStaring);
+                Toast.makeText(getApplicationContext(), R.string.taskNotRunning, Toast.LENGTH_SHORT).show();
+            }
+
+
+        });
+
+        alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                boolean isStaring = true;
+                isStartingTask(isStaring);
+
+                chronometrStartCounting();
+
+                Log.v("POSTION_TAG", String.valueOf(positionInListView));
+                listWithData.setEnabled(false);
+
+            }
+        });
+
+        alertDialogBuilder.setMessage(R.string.alertMessageWhenStartTask);
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        alertDialog.show();
+
+            }
 
     private void addTimeIntegerToSqLite() {
 
@@ -295,10 +336,31 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
-    private void deleteRowFromDataBase(long id){
+    private void deleteRowFromDataBase(long id) {
 
         dataBaseToDo = new DataBaseToDo(this);
         dataBaseToDo.deleteRecord(id);
+    }
+
+
+    private void getSumColumnTimeInteger()
+    {
+        dataBaseToDo = new DataBaseToDo(this);
+        int sumColumnTimeInteger = dataBaseToDo.sumColumn();
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        df.setTimeZone(tz);
+        String time = df.format(new Date(sumColumnTimeInteger*1000L));
+
+
+        textView.setText(String.valueOf(time));
+
+    }
+
+    private boolean isStartingTask(boolean isStarting){
+
+
+        return isStarting;
     }
 
 
