@@ -1,6 +1,7 @@
 package info.textview;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,7 +35,7 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.activity_second);
 
         initVariables();
-        setListWithData2();
+        setListWithDataCursor();
         listViewListener();
         buttonViewListner();
 
@@ -131,7 +132,9 @@ public class SecondActivity extends AppCompatActivity {
     private void setListWithDataCursor(){
 
         DataBaseToDo dataBaseToDo = new DataBaseToDo(this);
-        dataBaseToDo.wyswietl("Table");
+        Cursor c = dataBaseToDo.display("ToDo");
+        CursorAdapterToDo cursorAdapterToDo = new CursorAdapterToDo(this, c, 0);
+        listWithData.setAdapter(cursorAdapterToDo);
 
     }
 

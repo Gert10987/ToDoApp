@@ -5,10 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.Editable;
 
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +22,17 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
     private static final int DATABASE_VESRION = 1;
 
-    String TABLE_KREBS = "Table";
+    String TABLE_TODO_APP = "ToDo";
 
     protected static final String DATABASE_ID = "id";
 
-    protected static final String COLUMN_POLISHWORD = "Title";
+    public static final String COLUMN_TITLE = "TitleToDo";
 
-    protected static final String COLUMN_ENGLISHWORD = "Time";
+    public static final String COLUMN_TIME = "TimeToDo";
+
+    public static final String COLUMN_IS_DONE = "IsDoneToDo";
+
+    public static final String COLUMN_TIME_INTEGER = "TimeIntegerToDo";
 
     /******
      * Constructor
@@ -46,7 +47,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
     public void setNameOfTable(String nameOfTable) {
 
-        this.TABLE_KREBS = nameOfTable;
+        this.TABLE_TODO_APP = nameOfTable;
 
     }
 
@@ -79,20 +80,24 @@ public class DataBaseToDo extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL(
-                "create table " + TABLE_KREBS + "(" +
+                "create table " + TABLE_TODO_APP + "(" +
                         DATABASE_ID + " integer primary key not null, " +
-                        COLUMN_POLISHWORD + " text, " +
-                        COLUMN_ENGLISHWORD + " text);");
+                        COLUMN_TITLE + " text, " +
+                        COLUMN_TIME + " text, " +
+                        COLUMN_TIME_INTEGER + " text, " +
+                        COLUMN_IS_DONE + " integer);");
     }
 
     public void newTable(String name) {
 
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("create table " + name + "(" +
-                DATABASE_ID + " integer primary key not null, " +
-                COLUMN_POLISHWORD + " text, " +
-                COLUMN_ENGLISHWORD + " text);");
-
+        db.execSQL(
+                "create table " + TABLE_TODO_APP + "(" +
+                        DATABASE_ID + " integer primary key not null, " +
+                        COLUMN_TITLE + " text, " +
+                        COLUMN_TIME + " text, " +
+                        COLUMN_TIME_INTEGER + " text, " +
+                        COLUMN_IS_DONE + " integer);");
     }
 
     /********
@@ -112,18 +117,31 @@ public class DataBaseToDo extends SQLiteOpenHelper {
      * Add Values method
      ************/
 
-    public long addWord(String polishWord, String englishWord) {
+    public void addTitle(String title){
 
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_POLISHWORD, polishWord);
-        values.put(COLUMN_ENGLISHWORD, englishWord);
+        values.put(COLUMN_TITLE, title);
+
+        db.insert(TABLE_TODO_APP, null, values);
 
 
-        long insertId = db.insert(TABLE_KREBS, null, values);
+    }
+
+    public long addTime(String time, int timeInteger, int isDone) {
+
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TIME, time);
+        values.put(COLUMN_TIME_INTEGER, timeInteger);
+        values.put(COLUMN_IS_DONE, isDone);
+
+
+        long insertId = db.update(TABLE_TODO_APP, values, DATABASE_ID + " = "+ 2, null);
 
         return insertId;
     }
+
 
     /**********
      * GetID method
@@ -132,7 +150,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
     public List getId() {
 
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT id as _id , PolishWord, EnglishWord from " + TABLE_KREBS + " order by EnglishWord ASC", null);
+        Cursor cursor = db.rawQuery("SELECT id as _id " + COLUMN_TITLE + COLUMN_TIME + " from " + TABLE_TODO_APP, null);
         ArrayList<String> list = new ArrayList<String>();
 
         int i = 0;
@@ -163,13 +181,13 @@ public class DataBaseToDo extends SQLiteOpenHelper {
      * method display values
      ***/
 
-    public Cursor wyswietl(String table) {
+    public Cursor display(String table) {
 
 
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.rawQuery
-                ("SELECT id as _id , PolishWord, EnglishWord from " + TABLE_KREBS + " order by EnglishWord ASC", null);
+                ("SELECT id as _id, " + COLUMN_TITLE + " , "+ COLUMN_TIME + " , " + COLUMN_IS_DONE + " from " + TABLE_TODO_APP, null);
 
         if (cursor != null) {
 
@@ -191,7 +209,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
         try {
 
             SQLiteDatabase db = getWritableDatabase();
-            db.delete(TABLE_KREBS, DATABASE_ID + " = " + word, null);
+            db.delete(TABLE_TODO_APP, DATABASE_ID + " = " + word, null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -202,13 +220,21 @@ public class DataBaseToDo extends SQLiteOpenHelper {
         return word;
     }
 
-    public String getColumnPolishword() {
-        return COLUMN_POLISHWORD;
+    public String getColumnTitle() {
+        return COLUMN_TITLE;
     }
 
-    public String getColumnEnglishword() {
-        return COLUMN_ENGLISHWORD;
+    public String getColumnTime() {
+        return COLUMN_TIME;
     }
+
+    public String getColumnIsDone() {
+        return COLUMN_IS_DONE;
+    }
+    public String getColumnTimeInteger() {
+        return COLUMN_TIME_INTEGER;
+    }
+
 }
 
 

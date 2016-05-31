@@ -10,13 +10,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import info.textview.DataBase.DataBaseToDo;
+
 public class MainActivity extends Activity {
 
     Button buttonStart, buttonNext;
     TextView textView;
     EditText editText;
-    ArrayList<String> dataForListView;
-    int counter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,29 +26,8 @@ public class MainActivity extends Activity {
 
         initVariable();
 
-        buttonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                String value = editText.getText().toString();
-                textView.setText(value);
-                dataForListView.add(counter, value);
-                counter++;
-                editText.setText("");
 
-            }
-        });
-
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getApplicationContext(), SecondActivity.class);
-                intent.putExtra("lista", dataForListView);
-                startActivity(intent);
-
-            }
-        });
     }
 
     public void initVariable() {
@@ -57,8 +37,53 @@ public class MainActivity extends Activity {
         editText = (EditText) findViewById(R.id.editText);
         buttonNext = (Button) findViewById(R.id.buttonNext);
 
-        counter = 0;
-        dataForListView = new ArrayList<String>();
+
+    }
+
+    public void addTitleToSqLite(){
+
+        DataBaseToDo dataBaseToDo = new DataBaseToDo(this);
+        dataBaseToDo.addTitle(getTitleFromEditText());
+        dataBaseToDo.addTime("23:32", 25, 1);
+
+    }
+
+    public String getTitleFromEditText(){
+
+        String value = editText.getText().toString();
+
+        return value;
+    }
+
+    public void onClick(View view) {
+
+        switch (view.getId()){
+
+            case R.id.buttonAdd:
+                try{
+
+                    addTitleToSqLite();
+                    textView.setText(getTitleFromEditText());
+                    editText.setText("");
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                break;
+
+            case R.id.buttonNext:
+                try{
+
+                    Intent intent = new Intent(getApplicationContext(), SecondActivity.class);
+                    startActivity(intent);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+
+        }
 
     }
 }
