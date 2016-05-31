@@ -46,19 +46,23 @@ public class CursorAdapterToDo extends CursorAdapter {
         ImageView imageView = (ImageView) view.findViewById(R.id.imgView);
         int isDone = cursor.getInt(cursor.getColumnIndexOrThrow(DataBaseToDo.COLUMN_IS_DONE));
 
-        switch (isDone){
+        switch (isDone) {
 
-                case 0:
+            case 0:
 
-                    imageView.setImageResource(R.drawable.lets_do_it);
+                imageView.setImageResource(R.drawable.lets_do_it);
 
-                    break;
+                break;
 
-                case 1:
+            case 1:
 
-                    imageView.setImageResource(R.drawable.ok_man);
+                imageView.setImageResource(R.drawable.doing);
 
-                    break;
+                break;
+
+            case 2:
+
+                imageView.setImageResource(R.drawable.ok_man);
 
         }
 

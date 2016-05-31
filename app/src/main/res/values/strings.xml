@@ -5,4 +5,9 @@
     <string name="thisGroupDoesExist">Takie Projekt istnieje</string>
     <string name="next">Next</string>
     <string name="add">Add</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="alertMessage">Czy zadanie jest wykoane?</string>
+    <string name="nothingDeleted">Nie usunieto</string>
+    <string name="alertMessageWhenDeleteRow">Czy usunac zadanie?</string>
 </resources>

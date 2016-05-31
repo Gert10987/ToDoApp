@@ -34,6 +34,8 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
     public static final String COLUMN_TIME_INTEGER = "TimeIntegerToDo";
 
+    long indexPosition;
+
     /******
      * Constructor
      *************/
@@ -49,6 +51,10 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
         this.TABLE_TODO_APP = nameOfTable;
 
+    }
+
+    public void setIndexPosition(long indexPosition){
+        this.indexPosition = indexPosition;
     }
 
     /********
@@ -67,7 +73,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
                 c.moveToNext();
             }
         }
-
+        db.close();
         return arrTblNames;
     }
 
@@ -84,8 +90,10 @@ public class DataBaseToDo extends SQLiteOpenHelper {
                         DATABASE_ID + " integer primary key not null, " +
                         COLUMN_TITLE + " text, " +
                         COLUMN_TIME + " text, " +
-                        COLUMN_TIME_INTEGER + " text, " +
+                        COLUMN_TIME_INTEGER + " integer, " +
                         COLUMN_IS_DONE + " integer);");
+
+        db.close();
     }
 
     public void newTable(String name) {
@@ -96,8 +104,10 @@ public class DataBaseToDo extends SQLiteOpenHelper {
                         DATABASE_ID + " integer primary key not null, " +
                         COLUMN_TITLE + " text, " +
                         COLUMN_TIME + " text, " +
-                        COLUMN_TIME_INTEGER + " text, " +
+                        COLUMN_TIME_INTEGER + " integer, " +
                         COLUMN_IS_DONE + " integer);");
+
+        db.close();
     }
 
     /********
@@ -109,6 +119,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXIST " + DATABASE_NAME);
         onCreate(db);
+        db.close();
 
     }
 
@@ -125,21 +136,49 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
         db.insert(TABLE_TODO_APP, null, values);
 
+        db.close();
+
 
     }
 
-    public long addTime(String time, int timeInteger, int isDone) {
+    public void addTime(String time) {
 
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_TIME, time);
+
+
+
+        db.update(TABLE_TODO_APP, values, DATABASE_ID + " = "+ indexPosition, null);
+
+        db.close();
+
+
+    }
+
+    public void addTimeInteger(int timeInteger){
+
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
         values.put(COLUMN_TIME_INTEGER, timeInteger);
+
+        db.update(TABLE_TODO_APP, values, DATABASE_ID + " = "+ indexPosition, null);
+
+        db.close();
+
+    }
+
+    public void addIsDoneValue(int isDone){
+
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
         values.put(COLUMN_IS_DONE, isDone);
 
 
-        long insertId = db.update(TABLE_TODO_APP, values, DATABASE_ID + " = "+ 2, null);
+        db.update(TABLE_TODO_APP, values, DATABASE_ID + " = "+ indexPosition, null);
 
-        return insertId;
+        db.close();
+
     }
 
 
@@ -165,6 +204,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
             }
         }
         cursor.close();
+        db.close();
 
 
         return list;
@@ -194,7 +234,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         }
-
+        db.close();
         return cursor;
 
 
@@ -204,7 +244,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
      * delete record
      *************/
 
-    public long DeleteRecord(long word) {
+    public long deleteRecord(long word) {
 
         try {
 

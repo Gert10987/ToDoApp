@@ -1,10 +1,13 @@
 package info.textview;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,6 +24,12 @@ import info.textview.DataBase.DataBaseToDo;
 
 public class SecondActivity extends AppCompatActivity {
 
+    private static final int IS_DONE = 2;
+
+    private static final int IS_DOING = 1;
+
+    private static final int TO_DO = 0;
+
     ListView listWithData;
     ArrayAdapter<String> arrayAdapter;
     ListViewHolder listViewHolder;
@@ -28,6 +37,10 @@ public class SecondActivity extends AppCompatActivity {
     Chronometer chronometer;
     TextView textView;
     Button stopCountingButton;
+    long positionInListView;
+
+    DataBaseToDo dataBaseToDo = new DataBaseToDo(SecondActivity.this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +61,29 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(listWithData.isEnabled()){
+                if (listWithData.isEnabled()) {
 
                     chronometrStartCounting();
-
-
+                    positionInListView = parent.getItemIdAtPosition(position);
+                    Log.v("POSTION_TAG", String.valueOf(positionInListView));
                     listWithData.setEnabled(false);
-                }else{
+                } else {
 
                     Toast.makeText(getApplicationContext(), R.string.ListViewIsEnabled, Toast.LENGTH_SHORT).show();
 
                 }
 
 
+            }
+        });
 
+        listWithData.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                setUpAlertDialogWhenDelete(v.getId());
+
+                return true;
             }
         });
 
@@ -69,14 +91,16 @@ public class SecondActivity extends AppCompatActivity {
     }
 
 
-    private void buttonViewListner(){
+    private void buttonViewListner() {
 
         stopCountingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 chronometerStopCounting();
+                setUpAlertDialogWhenStopButtonClicked(positionInListView);
                 listWithData.setEnabled(true);
+
             }
         });
     }
@@ -84,9 +108,16 @@ public class SecondActivity extends AppCompatActivity {
     private void chronometerStopCounting() {
 
         chronometer.stop();
-        String chronometrValue = chronometer.getText().toString();
-        textView.setText(chronometrValue);
 
+        textView.setText(getChronometerValue());
+
+    }
+
+    private String getChronometerValue() {
+
+        String chronometrValue = chronometer.getText().toString();
+
+        return chronometrValue;
     }
 
     private void chronometrStartCounting() {
@@ -115,7 +146,7 @@ public class SecondActivity extends AppCompatActivity {
         listWithData.setAdapter(arrayAdapter);
     }
 
-    private void setListWithData2(){
+    private void setListWithData2() {
         ItemToDoApp object = new ItemToDoApp("pierwszy", "10:10", R.drawable.lets_do_it);
         ItemToDoApp object2 = new ItemToDoApp("drufi to i tamto xsratarasadasdsadsadawdawdcxzcxzcasawcwadwasdxcxzvdscsaca", "00:10", R.drawable.lets_do_it);
         ItemToDoApp object3 = new ItemToDoApp("dhasda saduas csacsacsacsacascsacsacsacsadsahdsagdcgsacdgsacgdcsgacdgsacgdcsagdcgsa", "10", R.drawable.ok_man);
@@ -129,7 +160,7 @@ public class SecondActivity extends AppCompatActivity {
         listWithData.setAdapter(listViewHolder);
     }
 
-    private void setListWithDataCursor(){
+    private void setListWithDataCursor() {
 
         DataBaseToDo dataBaseToDo = new DataBaseToDo(this);
         Cursor c = dataBaseToDo.display("ToDo");
@@ -138,27 +169,136 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
-    public static int getSecondsFromDurationString(String value){
+    private static int getSecondsFromDurationString(String value) {
 
-        String [] parts = value.split(":");
+        String[] parts = value.split(":");
 
         // Wrong format, no value for you.
-        if(parts.length < 2 || parts.length > 3)
+        if (parts.length < 2 || parts.length > 3)
             return 0;
 
         int seconds = 0, minutes = 0, hours = 0;
 
-        if(parts.length == 2){
+        if (parts.length == 2) {
             seconds = Integer.parseInt(parts[1]);
             minutes = Integer.parseInt(parts[0]);
-        }
-        else if(parts.length == 3){
+        } else if (parts.length == 3) {
             seconds = Integer.parseInt(parts[2]);
             minutes = Integer.parseInt(parts[1]);
             hours = Integer.parseInt(parts[1]);
         }
 
-        return seconds + (minutes*60) + (hours*3600);
+        return seconds + (minutes * 60) + (hours * 3600);
+    }
+
+    private void setUpAlertDialogWhenStopButtonClicked(final long positionInListView) {
+
+        dataBaseToDo = new DataBaseToDo(SecondActivity.this);
+
+        dataBaseToDo.setIndexPosition(positionInListView);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                addTimeToSqlite();
+                addTimeIntegerToSqLite();
+                addIsDoneValueToSqLite(IS_DOING);
+                resetActivity();
+            }
+
+
+        });
+
+        alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                addTimeToSqlite();
+                addTimeIntegerToSqLite();
+                addIsDoneValueToSqLite(IS_DONE);
+                Log.v("DATABASE TO DO", String.valueOf(positionInListView));
+                resetActivity();
+
+            }
+        });
+
+        alertDialogBuilder.setMessage(R.string.alertMessage);
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        alertDialog.show();
+
+    }
+
+    private void setUpAlertDialogWhenDelete(final long positionInListView) {
+
+        dataBaseToDo = new DataBaseToDo(SecondActivity.this);
+
+        dataBaseToDo.setIndexPosition(positionInListView);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                Toast.makeText(getApplicationContext(), R.string.nothingDeleted, Toast.LENGTH_SHORT).show();
+            }
+
+
+        });
+
+        alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+               deleteRowFromDataBase(positionInListView);
+
+            }
+        });
+
+        alertDialogBuilder.setMessage(R.string.alertMessageWhenDeleteRow);
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        alertDialog.show();
+
+    }
+
+    private void addTimeIntegerToSqLite() {
+
+        dataBaseToDo.addTimeInteger(getSecondsFromDurationString(getChronometerValue()));
+    }
+
+    private void addIsDoneValueToSqLite(int isDone) {
+
+        dataBaseToDo.addIsDoneValue(isDone);
+    }
+
+    private void addTimeToSqlite() {
+
+        dataBaseToDo.addTime(getChronometerValue());
+
+    }
+
+    private void resetActivity() {
+
+        Intent intent = new Intent(SecondActivity.this, SecondActivity.class);
+        startActivity(intent);
+
+    }
+
+    private void deleteRowFromDataBase(long id){
+
+        dataBaseToDo = new DataBaseToDo(this);
+        dataBaseToDo.deleteRecord(id);
     }
 
 

@@ -27,7 +27,6 @@ public class MainActivity extends Activity {
         initVariable();
 
 
-
     }
 
     public void initVariable() {
@@ -44,7 +43,7 @@ public class MainActivity extends Activity {
 
         DataBaseToDo dataBaseToDo = new DataBaseToDo(this);
         dataBaseToDo.addTitle(getTitleFromEditText());
-        dataBaseToDo.addTime("23:32", 25, 1);
+
 
     }
 
