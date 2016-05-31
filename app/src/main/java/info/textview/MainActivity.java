@@ -26,6 +26,10 @@ public class MainActivity extends Activity {
 
         initVariable();
 
+      //  DataBaseToDo dataBaseToDo = new DataBaseToDo(this);
+      //  dataBaseToDo.deleteTable("ToDo");
+        //dataBaseToDo.newTable("ToDo2");
+
 
     }
 

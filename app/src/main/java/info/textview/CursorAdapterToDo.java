@@ -10,6 +10,10 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import info.textview.DataBase.DataBaseToDo;
 
 /**
@@ -40,8 +44,9 @@ public class CursorAdapterToDo extends CursorAdapter {
         txtTitle.setText(title);
 
         TextView txtTime = (TextView) view.findViewById(R.id.txtTime);
-        String time = cursor.getString(cursor.getColumnIndexOrThrow(DataBaseToDo.COLUMN_TIME));
-        txtTime.setText(time);
+        int time = cursor.getInt(cursor.getColumnIndexOrThrow(DataBaseToDo.COLUMN_TIME_INTEGER));
+
+        txtTime.setText(getSumColumnTimeInteger(time));
 
         ImageView imageView = (ImageView) view.findViewById(R.id.imgView);
         int isDone = cursor.getInt(cursor.getColumnIndexOrThrow(DataBaseToDo.COLUMN_IS_DONE));
@@ -66,6 +71,19 @@ public class CursorAdapterToDo extends CursorAdapter {
 
         }
 
+
+    }
+
+    private String getSumColumnTimeInteger(int timeInInteger)
+    {
+
+
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        df.setTimeZone(tz);
+        String time = df.format(new Date(timeInInteger*1000L));
+
+        return time;
 
     }
 }

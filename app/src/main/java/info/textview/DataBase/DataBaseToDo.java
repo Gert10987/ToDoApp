@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,10 +143,11 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
     public void addTime(String time) {
 
+
         SQLiteDatabase db = getWritableDatabase();
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_TIME, time);
-
 
 
         db.update(TABLE_TODO_APP, values, DATABASE_ID + " = "+ indexPosition, null);
@@ -155,12 +157,26 @@ public class DataBaseToDo extends SQLiteOpenHelper {
     }
 
     public void addTimeInteger(int timeInteger){
-
+        int x = 0;
         SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
+
+       /* ContentValues values = new ContentValues();
         values.put(COLUMN_TIME_INTEGER, timeInteger);
 
-        db.update(TABLE_TODO_APP, values, DATABASE_ID + " = "+ indexPosition, null);
+        db.update(TABLE_TODO_APP, values, DATABASE_ID + " = " + indexPosition, null);*/
+
+
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_TIME_INTEGER + " FROM " + TABLE_TODO_APP
+                + " WHERE " + DATABASE_ID + " = " + indexPosition, null);
+        if(cursor.moveToFirst())
+        {
+            x = cursor.getInt(0);
+        }
+
+        x = x + timeInteger;
+
+        db.execSQL("UPDATE " + TABLE_TODO_APP + " SET " + COLUMN_TIME_INTEGER
+                + " = " + x + " WHERE " + DATABASE_ID + " = " + indexPosition);
 
 
     }
@@ -221,7 +237,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.rawQuery
-                ("SELECT id as _id, " + COLUMN_TITLE + " , "+ COLUMN_TIME + " , " + COLUMN_IS_DONE + " from " + TABLE_TODO_APP, null);
+                ("SELECT id as _id, " + COLUMN_TITLE + " , "+ COLUMN_TIME_INTEGER + " , " + COLUMN_IS_DONE + " from " + TABLE_TODO_APP, null);
 
         if (cursor != null) {
 
