@@ -13,4 +13,5 @@
     <string name="taskNotRunning">Zadanie nie rozpoczete</string>
     <string name="alertMessageWhenStartTask">Czy rozpoczac zadanie ?</string>
     <string name="thsiNameIsBusy">ta nazwa jest zajeta</string>
+    <string name="alertMessageWhenDeleteTable">Czy usunac ten projekt?</string>
 </resources>
