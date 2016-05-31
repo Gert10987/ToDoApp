@@ -12,4 +12,5 @@
     <string name="alertMessageWhenDeleteRow">Czy usunac zadanie?</string>
     <string name="taskNotRunning">Zadanie nie rozpoczete</string>
     <string name="alertMessageWhenStartTask">Czy rozpoczac zadanie ?</string>
+    <string name="thsiNameIsBusy">ta nazwa jest zajeta</string>
 </resources>

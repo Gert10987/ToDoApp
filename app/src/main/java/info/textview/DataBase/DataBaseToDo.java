@@ -23,7 +23,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
     private static final int DATABASE_VESRION = 1;
 
-    String TABLE_TODO_APP = "ToDo";
+    String TABLE_TODO_APP;
 
     protected static final String DATABASE_ID = "id";
 
@@ -101,7 +101,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(
-                "create table " + TABLE_TODO_APP + "(" +
+                "create table " + name + "(" +
                         DATABASE_ID + " integer primary key not null, " +
                         COLUMN_TITLE + " text, " +
                         COLUMN_TIME + " text, " +

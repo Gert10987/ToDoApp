@@ -10,25 +10,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
+
 
 import info.textview.DataBase.DataBaseToDo;
 
 
 
 public class SecondActivity extends AppCompatActivity {
+
+    public static final String NAME_OF_PROJECT_EXIST = "info.textview.NameOfProjectExist";
 
     private static final int IS_DONE = 2;
 
@@ -37,13 +38,12 @@ public class SecondActivity extends AppCompatActivity {
     private static final int TO_DO = 0;
 
     ListView listWithData;
-    ArrayAdapter<String> arrayAdapter;
-    ListViewHolder listViewHolder;
     ArrayList<String> arrayListToGetData;
     Chronometer chronometer;
     TextView textView;
     Button stopCountingButton;
     long positionInListView;
+    String nameOfProject;
 
     DataBaseToDo dataBaseToDo = new DataBaseToDo(SecondActivity.this);
 
@@ -53,12 +53,22 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
+        initNameOfProject();
         initVariables();
         setListWithDataCursor();
         listViewListener();
         buttonViewListner();
         getSumColumnTimeInteger();
 
+
+
+    }
+
+    private void initNameOfProject() {
+
+        nameOfProject = getIntent().getStringExtra(NAME_OF_PROJECT_EXIST);
+        Log.v("TAG", nameOfProject);
+        dataBaseToDo.setNameOfTable(nameOfProject);
 
 
     }
@@ -139,31 +149,11 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
-    private void setListWithData() {
-
-        arrayAdapter = new ArrayAdapter<String>(SecondActivity.this,
-                android.R.layout.simple_list_item_1, arrayListToGetData);
-        listWithData.setAdapter(arrayAdapter);
-    }
-
-    private void setListWithData2() {
-        ItemToDoApp object = new ItemToDoApp("pierwszy", "10:10", R.drawable.lets_do_it);
-        ItemToDoApp object2 = new ItemToDoApp("drufi to i tamto xsratarasadasdsadsadawdawdcxzcxzcasawcwadwasdxcxzvdscsaca", "00:10", R.drawable.lets_do_it);
-        ItemToDoApp object3 = new ItemToDoApp("dhasda saduas csacsacsacsacascsacsacsacsadsahdsagdcgsacdgsacgdcsgacdgsacgdcsagdcgsa", "10", R.drawable.ok_man);
-        ArrayList<ItemToDoApp> itemToDoAppsList = new ArrayList<>();
-        itemToDoAppsList.add(0, object);
-        itemToDoAppsList.add(1, object2);
-        itemToDoAppsList.add(2, object3);
-
-        listViewHolder = new ListViewHolder(SecondActivity.this, R.layout.lis_view_record, itemToDoAppsList);
-
-        listWithData.setAdapter(listViewHolder);
-    }
 
     private void setListWithDataCursor() {
 
-        DataBaseToDo dataBaseToDo = new DataBaseToDo(this);
-        Cursor c = dataBaseToDo.display("ToDo");
+
+        Cursor c = dataBaseToDo.display(nameOfProject);
         CursorAdapterToDo cursorAdapterToDo = new CursorAdapterToDo(this, c, 0);
         listWithData.setAdapter(cursorAdapterToDo);
 
@@ -193,7 +183,6 @@ public class SecondActivity extends AppCompatActivity {
 
     private void setUpAlertDialogWhenStopButtonClicked(final long positionInListView) {
 
-        dataBaseToDo = new DataBaseToDo(SecondActivity.this);
 
         dataBaseToDo.setIndexPosition(positionInListView);
 
@@ -237,7 +226,6 @@ public class SecondActivity extends AppCompatActivity {
 
     private void setUpAlertDialogWhenDelete(final long positionInListView) {
 
-        dataBaseToDo = new DataBaseToDo(SecondActivity.this);
 
         dataBaseToDo.setIndexPosition(positionInListView);
 
@@ -282,8 +270,8 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                boolean isStaring = false;
-                isStartingTask(isStaring);
+
+                isStartingTask(false);
                 Toast.makeText(getApplicationContext(), R.string.taskNotRunning, Toast.LENGTH_SHORT).show();
             }
 
@@ -294,8 +282,8 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                boolean isStaring = true;
-                isStartingTask(isStaring);
+
+                isStartingTask(true);
 
                 chronometrStartCounting();
 
@@ -332,20 +320,21 @@ public class SecondActivity extends AppCompatActivity {
     private void resetActivity() {
 
         Intent intent = new Intent(SecondActivity.this, SecondActivity.class);
+        intent.putExtra(NAME_OF_PROJECT_EXIST, nameOfProject);
         startActivity(intent);
 
     }
 
     private void deleteRowFromDataBase(long id) {
 
-        dataBaseToDo = new DataBaseToDo(this);
+
         dataBaseToDo.deleteRecord(id);
     }
 
 
     private void getSumColumnTimeInteger()
     {
-        dataBaseToDo = new DataBaseToDo(this);
+
         int sumColumnTimeInteger = dataBaseToDo.sumColumn();
         TimeZone tz = TimeZone.getTimeZone("UTC");
         SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");

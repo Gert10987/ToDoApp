@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".NewProjectActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -22,9 +22,10 @@
         </activity>
 
 
-        <activity android:name=".SecondActivity">
+        <activity android:name=".SecondActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
 
-        </activity>
+
 
     </application>
 

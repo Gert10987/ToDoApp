@@ -3,6 +3,7 @@ package info.textview;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,16 +15,23 @@ import info.textview.DataBase.DataBaseToDo;
 
 public class MainActivity extends Activity {
 
+    public static final String NAME_OF_PROJECT_EXIST = "info.textview.NameOfProjectExist";
+
+    public static final String NAME_OF_PROJECT_CREATE = "info.textview.NameOfProjectCreate";
+
     Button buttonStart, buttonNext;
     TextView textView;
     EditText editText;
+    String name;
 
+    DataBaseToDo dataBaseToDo = new DataBaseToDo(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initNameOfProject();
         initVariable();
 
       //  DataBaseToDo dataBaseToDo = new DataBaseToDo(this);
@@ -45,7 +53,7 @@ public class MainActivity extends Activity {
 
     public void addTitleToSqLite(){
 
-        DataBaseToDo dataBaseToDo = new DataBaseToDo(this);
+
         dataBaseToDo.addTitle(getTitleFromEditText());
 
 
@@ -78,12 +86,34 @@ public class MainActivity extends Activity {
                 try{
 
                     Intent intent = new Intent(getApplicationContext(), SecondActivity.class);
+                    intent.putExtra(NAME_OF_PROJECT_EXIST, name);
                     startActivity(intent);
 
                 }catch (Exception e){
                     e.printStackTrace();
                 }
 
+        }
+
+    }
+
+    private void initNameOfProject() {
+
+
+
+        name = getIntent().getStringExtra(NAME_OF_PROJECT_EXIST);
+
+        if(name == null){
+
+            name = getIntent().getStringExtra(NAME_OF_PROJECT_CREATE);
+
+            Log.v("TAG", name);
+
+            dataBaseToDo.newTable(name);
+
+        }else{
+
+            dataBaseToDo.setNameOfTable(name);
 
 
         }
