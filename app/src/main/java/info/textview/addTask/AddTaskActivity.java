@@ -37,7 +37,6 @@ public class AddTaskActivity extends Activity {
         initVariable();
 
 
-
     }
 
     private void initDataBase(){

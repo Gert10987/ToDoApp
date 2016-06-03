@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.SystemClock;
 
 import android.support.v4.app.Fragment;
@@ -137,8 +138,6 @@ public class TasksActivity extends AppCompatActivity {
     private void initVariables() {
 
         listWithData = (ListView) findViewById(R.id.listView);
-        arrayListToGetData = new ArrayList<String>();
-        arrayListToGetData = getIntent().getStringArrayListExtra("lista");
         chronometer = (Chronometer) findViewById(R.id.chronometerr);
         textView = (TextView) findViewById(R.id.zzz);
         stopCountingButton = (Button) findViewById(R.id.stopButton);
@@ -161,10 +160,9 @@ public class TasksActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-               // positionInListView = parent.getItemIdAtPosition(position);
-               // setUpAlertDialogWhenStartTask();
-
-                setUpFragmentDetail();
+               positionInListView = parent.getItemIdAtPosition(position);
+               setUpAlertDialogWhenStartTask();
+               view.setBackgroundColor(Color.YELLOW);
 
 
             }
@@ -234,7 +232,7 @@ public class TasksActivity extends AppCompatActivity {
     }
 
 
-    private static int getSecondsFromDurationString(String value) {
+    public int getSecondsFromDurationString(String value) {
 
         String[] parts = value.split(":");
 
@@ -412,15 +410,6 @@ public class TasksActivity extends AppCompatActivity {
         return isStarting;
     }
 
-    private void setUpFragmentDetail(){
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        TaskDetailFragment taskDetailFragment = new TaskDetailFragment();
-        fragmentTransaction.replace(R.id.frameFragment, taskDetailFragment);
-        fragmentTransaction.commit();
-
-    }
 
 
 }
