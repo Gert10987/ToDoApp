@@ -34,6 +34,7 @@ import info.textview.DataBase.CursorAdapterToDo;
 import info.textview.DataBase.DataBaseToDo;
 import info.textview.R;
 import info.textview.StartActivity.StartActivity;
+import info.textview.addTask.AddTaskActivity;
 
 
 public class TasksActivity extends AppCompatActivity {
@@ -92,7 +93,9 @@ public class TasksActivity extends AppCompatActivity {
 
             case R.id.addTask:{
 
-                Toast.makeText(TasksActivity.this, "Menu working", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(TasksActivity.this, AddTaskActivity.class);
+                intent.putExtra(NAME_OF_PROJECT_EXIST, nameOfProject);
+                startActivity(intent);
 
                 break;
 

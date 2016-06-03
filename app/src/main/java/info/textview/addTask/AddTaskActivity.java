@@ -23,7 +23,7 @@ public class AddTaskActivity extends Activity {
 
     private TextView textView;
     private EditText editText;
-    private String name;
+    private String nameOfProject;
 
     private DataBaseToDo dataBaseToDo;
 
@@ -33,10 +33,25 @@ public class AddTaskActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        initDataBase();
         initVariable();
 
 
+
+    }
+
+    private void initDataBase(){
+
+        dataBaseToDo = new DataBaseToDo(this);
+        dataBaseToDo.setNameOfTable(getNameOfProject());
+
+    }
+
+    private String getNameOfProject() {
+
+        nameOfProject = getIntent().getStringExtra(NAME_OF_PROJECT_EXIST);
+
+        return nameOfProject;
 
     }
 
@@ -44,7 +59,7 @@ public class AddTaskActivity extends Activity {
 
         textView = (TextView) findViewById(R.id.textView1);
         editText = (EditText) findViewById(R.id.editText);
-        dataBaseToDo = new DataBaseToDo(this);
+
 
     }
 
@@ -83,7 +98,7 @@ public class AddTaskActivity extends Activity {
                 try{
 
                     Intent intent = new Intent(getApplicationContext(), TasksActivity.class);
-                    intent.putExtra(NAME_OF_PROJECT_EXIST, name);
+                    intent.putExtra(NAME_OF_PROJECT_EXIST, nameOfProject);
                     startActivity(intent);
 
                 }catch (Exception e){
