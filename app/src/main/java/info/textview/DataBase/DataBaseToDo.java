@@ -23,8 +23,6 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
     private static final int DATABASE_VESRION = 1;
 
-    String TABLE_TODO_APP;
-
     protected static final String DATABASE_ID = "id";
 
     public static final String COLUMN_TITLE = "TitleToDo";
@@ -36,6 +34,8 @@ public class DataBaseToDo extends SQLiteOpenHelper {
     public static final String COLUMN_TIME_INTEGER = "TimeIntegerToDo";
 
     long indexPosition;
+
+    String TABLE_TODO_APP;
 
     /******
      * Constructor
@@ -157,7 +157,9 @@ public class DataBaseToDo extends SQLiteOpenHelper {
     }
 
     public void addTimeInteger(int timeInteger){
+
         int x = 0;
+
         SQLiteDatabase db = getWritableDatabase();
 
        /* ContentValues values = new ContentValues();
@@ -231,7 +233,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
      * method display values
      ***/
 
-    public Cursor display(String table) {
+    public Cursor display() {
 
 
         SQLiteDatabase db = getReadableDatabase();
@@ -281,22 +283,6 @@ public class DataBaseToDo extends SQLiteOpenHelper {
 
         return 0;
     }
-
-    public String getColumnTitle() {
-        return COLUMN_TITLE;
-    }
-
-    public String getColumnTime() {
-        return COLUMN_TIME;
-    }
-
-    public String getColumnIsDone() {
-        return COLUMN_IS_DONE;
-    }
-    public String getColumnTimeInteger() {
-        return COLUMN_TIME_INTEGER;
-    }
-
 
 
 }

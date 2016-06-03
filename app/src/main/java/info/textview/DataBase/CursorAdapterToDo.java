@@ -1,4 +1,4 @@
-package info.textview;
+package info.textview.DataBase;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import info.textview.DataBase.DataBaseToDo;
+import info.textview.R;
 
 /**
  * Created by Paweł on 2016-05-30.
@@ -76,7 +77,6 @@ public class CursorAdapterToDo extends CursorAdapter {
 
     private String getSumColumnTimeInteger(int timeInInteger)
     {
-
 
         TimeZone tz = TimeZone.getTimeZone("UTC");
         SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");

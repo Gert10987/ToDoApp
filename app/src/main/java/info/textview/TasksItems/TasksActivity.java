@@ -1,13 +1,20 @@
-package info.textview;
+package info.textview.TasksItems;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.SystemClock;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -23,13 +30,17 @@ import java.util.Date;
 import java.util.TimeZone;
 
 
+import info.textview.DataBase.CursorAdapterToDo;
 import info.textview.DataBase.DataBaseToDo;
+import info.textview.R;
+import info.textview.StartActivity.StartActivity;
 
 
-
-public class SecondActivity extends AppCompatActivity {
+public class TasksActivity extends AppCompatActivity {
 
     public static final String NAME_OF_PROJECT_EXIST = "info.textview.NameOfProjectExist";
+
+    public static final String NAME_OF_PROJECT_CREATE = "info.textview.NameOfProjectCreate";
 
     private static final int IS_DONE = 2;
 
@@ -37,22 +48,23 @@ public class SecondActivity extends AppCompatActivity {
 
     private static final int TO_DO = 0;
 
-    ListView listWithData;
-    ArrayList<String> arrayListToGetData;
-    Chronometer chronometer;
-    TextView textView;
-    Button stopCountingButton;
-    long positionInListView;
-    String nameOfProject;
+    private ListView listWithData;
+    private ArrayList<String> arrayListToGetData;
+    private Chronometer chronometer;
+    private TextView textView;
+    private Button stopCountingButton;
+    private long positionInListView;
+    private String nameOfProject;
 
-    DataBaseToDo dataBaseToDo = new DataBaseToDo(SecondActivity.this);
+    private DataBaseToDo dataBaseToDo;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        setContentView(R.layout.add_task_activity);
 
+        initDataBase();
         initNameOfProject();
         initVariables();
         setListWithDataCursor();
@@ -61,15 +73,82 @@ public class SecondActivity extends AppCompatActivity {
         getSumColumnTimeInteger();
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        return true;
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.addTask:{
+
+                Toast.makeText(TasksActivity.this, "Menu working", Toast.LENGTH_SHORT).show();
+
+                break;
+
+            }
+
+
+        }
+
+        return true;
+    }
+
+    private void initDataBase() {
+
+        dataBaseToDo = new DataBaseToDo(this);
+
+    }
+
 
     private void initNameOfProject() {
 
         nameOfProject = getIntent().getStringExtra(NAME_OF_PROJECT_EXIST);
-        Log.v("TAG", nameOfProject);
-        dataBaseToDo.setNameOfTable(nameOfProject);
 
+        if (nameOfProject == null) {
+
+            nameOfProject = getIntent().getStringExtra(NAME_OF_PROJECT_CREATE);
+
+            Log.v("TAG", nameOfProject);
+
+            dataBaseToDo.newTable(nameOfProject);
+
+        } else {
+
+            dataBaseToDo.setNameOfTable(nameOfProject);
+
+        }
+
+    }
+
+    private void initVariables() {
+
+        listWithData = (ListView) findViewById(R.id.listView);
+        arrayListToGetData = new ArrayList<String>();
+        arrayListToGetData = getIntent().getStringArrayListExtra("lista");
+        chronometer = (Chronometer) findViewById(R.id.chronometerr);
+        textView = (TextView) findViewById(R.id.zzz);
+        stopCountingButton = (Button) findViewById(R.id.stopButton);
+
+
+    }
+
+
+    private void setListWithDataCursor() {
+
+        Cursor c = dataBaseToDo.display();
+        CursorAdapterToDo cursorAdapterToDo = new CursorAdapterToDo(this, c, 0);
+        listWithData.setAdapter(cursorAdapterToDo);
 
     }
 
@@ -79,9 +158,10 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                positionInListView = parent.getItemIdAtPosition(position);
-                setUpAlertDialogWhenStartTask();
+               // positionInListView = parent.getItemIdAtPosition(position);
+               // setUpAlertDialogWhenStartTask();
 
+                setUpFragmentDetail();
 
 
             }
@@ -115,11 +195,24 @@ public class SecondActivity extends AppCompatActivity {
         });
     }
 
+    private void getSumColumnTimeInteger() {
+
+        int sumColumnTimeInteger = dataBaseToDo.sumColumn();
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        df.setTimeZone(tz);
+        String time = df.format(new Date(sumColumnTimeInteger * 1000L));
+
+
+        textView.setText(String.valueOf(time));
+
+    }
+
     private void chronometerStopCounting() {
 
         chronometer.stop();
 
-       // textView.setText(getChronometerValue());
+        // textView.setText(getChronometerValue());
 
     }
 
@@ -137,27 +230,6 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
-    private void initVariables() {
-
-        listWithData = (ListView) findViewById(R.id.listView);
-        arrayListToGetData = new ArrayList<String>();
-        arrayListToGetData = getIntent().getStringArrayListExtra("lista");
-        chronometer = (Chronometer) findViewById(R.id.chronometerr);
-        textView = (TextView) findViewById(R.id.zzz);
-        stopCountingButton = (Button) findViewById(R.id.stopButton);
-
-
-    }
-
-
-    private void setListWithDataCursor() {
-
-
-        Cursor c = dataBaseToDo.display(nameOfProject);
-        CursorAdapterToDo cursorAdapterToDo = new CursorAdapterToDo(this, c, 0);
-        listWithData.setAdapter(cursorAdapterToDo);
-
-    }
 
     private static int getSecondsFromDurationString(String value) {
 
@@ -299,7 +371,7 @@ public class SecondActivity extends AppCompatActivity {
 
         alertDialog.show();
 
-            }
+    }
 
     private void addTimeIntegerToSqLite() {
 
@@ -319,8 +391,8 @@ public class SecondActivity extends AppCompatActivity {
 
     private void resetActivity() {
 
-        Intent intent = new Intent(SecondActivity.this, SecondActivity.class);
-        intent.putExtra(NAME_OF_PROJECT_EXIST, nameOfProject);
+        Intent intent = new Intent(TasksActivity.this, TasksActivity.class);
+        intent.putExtra(StartActivity.NAME_OF_PROJECT_EXIST, nameOfProject);
         startActivity(intent);
 
     }
@@ -332,24 +404,19 @@ public class SecondActivity extends AppCompatActivity {
     }
 
 
-    private void getSumColumnTimeInteger()
-    {
-
-        int sumColumnTimeInteger = dataBaseToDo.sumColumn();
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-        df.setTimeZone(tz);
-        String time = df.format(new Date(sumColumnTimeInteger*1000L));
-
-
-        textView.setText(String.valueOf(time));
-
-    }
-
-    private boolean isStartingTask(boolean isStarting){
-
+    private boolean isStartingTask(boolean isStarting) {
 
         return isStarting;
+    }
+
+    private void setUpFragmentDetail(){
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        TaskDetailFragment taskDetailFragment = new TaskDetailFragment();
+        fragmentTransaction.replace(R.id.frameFragment, taskDetailFragment);
+        fragmentTransaction.commit();
+
     }
 
 

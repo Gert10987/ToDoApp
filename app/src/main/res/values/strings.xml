@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TextView</string>
+    <string name="app_name">ToDoApp</string>
     <string name="action_settings">Settings</string>
     <string name="ListViewIsEnabled">Wcisnij stop, jezeli chcesz rozpoczac inne zadanie</string>
     <string name="thisGroupDoesExist">Takie Projekt istnieje</string>

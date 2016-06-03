@@ -1,4 +1,4 @@
-package info.textview;
+package info.textview.StartActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,11 +17,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import info.textview.DataBase.DataBaseToDo;
+import info.textview.R;
+import info.textview.TasksItems.TasksActivity;
 
 /**
  * Created by Paweł on 2016-05-31.
  */
-public class NewProjectActivity extends Activity {
+public class StartActivity extends Activity {
 
     public static final String NAME_OF_PROJECT_EXIST = "info.textview.NameOfProjectExist";
 
@@ -39,11 +41,10 @@ public class NewProjectActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_project);
+        setContentView(R.layout.start_activity);
 
         initVariables();
         getNamesOfTables();
-
         setUpAdapter();
         setUpGridView();
     }
@@ -147,7 +148,7 @@ public class NewProjectActivity extends Activity {
 
     private void movesToAnotherActivity(String name, String Tag) {
 
-        Intent intent = new Intent(NewProjectActivity.this, MainActivity.class);
+        Intent intent = new Intent(StartActivity.this, TasksActivity.class);
         intent.putExtra(Tag, name);
         startActivity(intent);
     }
@@ -204,7 +205,7 @@ public class NewProjectActivity extends Activity {
 
     private void resetActivity() {
 
-        Intent intent = new Intent(NewProjectActivity.this, NewProjectActivity.class);
+        Intent intent = new Intent(StartActivity.this, StartActivity.class);
         startActivity(intent);
 
     }
