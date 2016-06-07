@@ -90,12 +90,21 @@ public class TasksActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
-            case R.id.addTask:{
+            case R.id.addTask: {
 
                 Intent intent = new Intent(TasksActivity.this, AddTaskActivity.class);
                 intent.putExtra(NAME_OF_PROJECT_EXIST, nameOfProject);
+                startActivity(intent);
+
+                break;
+
+            }
+
+            case R.id.Projects: {
+
+                Intent intent = new Intent(TasksActivity.this, StartActivity.class);
                 startActivity(intent);
 
                 break;
@@ -126,6 +135,8 @@ public class TasksActivity extends AppCompatActivity {
             Log.v("TAG", nameOfProject);
 
             dataBaseToDo.newTable(nameOfProject);
+
+            dataBaseToDo.setNameOfTable(nameOfProject);
 
         } else {
 
@@ -160,9 +171,10 @@ public class TasksActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-               positionInListView = parent.getItemIdAtPosition(position);
-               setUpAlertDialogWhenStartTask();
-               view.setBackgroundColor(Color.YELLOW);
+                positionInListView = parent.getItemIdAtPosition(position);
+
+                setUpAlertDialogWhenStartTask(view);
+                view.setBackgroundColor(Color.YELLOW);
 
 
             }
@@ -180,7 +192,6 @@ public class TasksActivity extends AppCompatActivity {
 
 
     }
-
 
     private void buttonViewListner() {
 
@@ -334,7 +345,7 @@ public class TasksActivity extends AppCompatActivity {
 
     }
 
-    private void setUpAlertDialogWhenStartTask() {
+    private void setUpAlertDialogWhenStartTask(final View view) {
 
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -344,7 +355,6 @@ public class TasksActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
 
-                isStartingTask(false);
                 Toast.makeText(getApplicationContext(), R.string.taskNotRunning, Toast.LENGTH_SHORT).show();
             }
 
@@ -356,8 +366,7 @@ public class TasksActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
 
-                isStartingTask(true);
-
+                view.setBackgroundColor(Color.YELLOW); //set Color field in listView
                 chronometrStartCounting();
 
                 Log.v("POSTION_TAG", String.valueOf(positionInListView));
@@ -404,11 +413,6 @@ public class TasksActivity extends AppCompatActivity {
         dataBaseToDo.deleteRecord(id);
     }
 
-
-    private boolean isStartingTask(boolean isStarting) {
-
-        return isStarting;
-    }
 
 
 

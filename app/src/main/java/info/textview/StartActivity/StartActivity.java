@@ -36,7 +36,7 @@ public class StartActivity extends Activity {
     EditText editText;
     ArrayList<String> arrayList;
 
-    DataBaseToDo dataBaseToDo = new DataBaseToDo(this);
+    DataBaseToDo dataBaseToDo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +63,7 @@ public class StartActivity extends Activity {
 
     private void getNamesOfTables() {
 
-
         arrayList = dataBaseToDo.getNameOfTables();
-
 
     }
 
@@ -101,6 +99,7 @@ public class StartActivity extends Activity {
         button = (Button) findViewById(R.id.buttonNewProject);
         editText = (EditText) findViewById(R.id.editTextNewProject);
         arrayList = new ArrayList<>();
+        dataBaseToDo = new DataBaseToDo(this);
 
     }
 

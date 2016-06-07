@@ -55,6 +55,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
     }
 
     public void setIndexPosition(long indexPosition){
+
         this.indexPosition = indexPosition;
     }
 
@@ -86,14 +87,14 @@ public class DataBaseToDo extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(
+      /*  db.execSQL(
                 "create table " + TABLE_TODO_APP + "(" +
                         DATABASE_ID + " integer primary key not null, " +
                         COLUMN_TITLE + " text, " +
                         COLUMN_TIME + " text, " +
                         COLUMN_TIME_INTEGER + " integer, " +
                         COLUMN_IS_DONE + " integer);");
-
+*/
 
     }
 
