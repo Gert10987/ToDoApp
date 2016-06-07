@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import info.textview.DataBase.DataBaseToDo;
 import info.textview.R;
@@ -78,12 +79,22 @@ public class CursorAdapterToDo extends CursorAdapter {
     private String getSumColumnTimeInteger(int timeInInteger)
     {
 
-        TimeZone tz = TimeZone.getTimeZone("UTC");
+      /*  TimeZone tz = TimeZone.getTimeZone("UTC");
         SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
         df.setTimeZone(tz);
         String time = df.format(new Date(timeInInteger*1000L));
 
-        return time;
+        return time;*/
+
+        final int MINUTES_IN_AN_HOUR = 60;
+        final int SECONDS_IN_A_MINUTE = 60;
+
+        int seconds = timeInInteger % SECONDS_IN_A_MINUTE;
+        int totalMinutes = timeInInteger / SECONDS_IN_A_MINUTE;
+        int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
+        int hours = totalMinutes / MINUTES_IN_AN_HOUR;
+
+        return String.valueOf(hours + ":" + minutes + ":" + seconds);
 
     }
 }

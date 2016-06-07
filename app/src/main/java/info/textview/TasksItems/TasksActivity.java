@@ -174,7 +174,7 @@ public class TasksActivity extends AppCompatActivity {
                 positionInListView = parent.getItemIdAtPosition(position);
 
                 setUpAlertDialogWhenStartTask(view);
-                view.setBackgroundColor(Color.YELLOW);
+
 
 
             }
@@ -210,13 +210,16 @@ public class TasksActivity extends AppCompatActivity {
     private void getSumColumnTimeInteger() {
 
         int sumColumnTimeInteger = dataBaseToDo.sumColumn();
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-        df.setTimeZone(tz);
-        String time = df.format(new Date(sumColumnTimeInteger * 1000L));
 
+        final int MINUTES_IN_AN_HOUR = 60;
+        final int SECONDS_IN_A_MINUTE = 60;
 
-        textView.setText(String.valueOf(time));
+        int seconds = sumColumnTimeInteger % SECONDS_IN_A_MINUTE;
+        int totalMinutes = sumColumnTimeInteger / SECONDS_IN_A_MINUTE;
+        int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
+        int hours = totalMinutes / MINUTES_IN_AN_HOUR;
+
+        textView.setText(String.valueOf(hours + ":" + minutes + ":" + seconds));
 
     }
 
@@ -232,12 +235,14 @@ public class TasksActivity extends AppCompatActivity {
 
         String chronometrValue = chronometer.getText().toString();
 
+
         return chronometrValue;
     }
 
+
     private void chronometrStartCounting() {
 
-        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.setBase(SystemClock.elapsedRealtime() - (10 * 3590 * 1000));
         chronometer.start();
 
     }
@@ -259,7 +264,7 @@ public class TasksActivity extends AppCompatActivity {
         } else if (parts.length == 3) {
             seconds = Integer.parseInt(parts[2]);
             minutes = Integer.parseInt(parts[1]);
-            hours = Integer.parseInt(parts[1]);
+            hours = Integer.parseInt(parts[0]);
         }
 
         return seconds + (minutes * 60) + (hours * 3600);
@@ -408,7 +413,6 @@ public class TasksActivity extends AppCompatActivity {
     }
 
     private void deleteRowFromDataBase(long id) {
-
 
         dataBaseToDo.deleteRecord(id);
     }
