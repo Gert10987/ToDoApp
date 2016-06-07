@@ -63,7 +63,7 @@ public class CursorAdapterToDo extends CursorAdapter {
 
             case 1:
 
-                imageView.setImageResource(R.drawable.doing);
+                imageView.setImageResource(R.drawable.start_but_not_end);
 
                 break;
 
@@ -78,13 +78,6 @@ public class CursorAdapterToDo extends CursorAdapter {
 
     private String getSumColumnTimeInteger(int timeInInteger)
     {
-
-      /*  TimeZone tz = TimeZone.getTimeZone("UTC");
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-        df.setTimeZone(tz);
-        String time = df.format(new Date(timeInInteger*1000L));
-
-        return time;*/
 
         final int MINUTES_IN_AN_HOUR = 60;
         final int SECONDS_IN_A_MINUTE = 60;

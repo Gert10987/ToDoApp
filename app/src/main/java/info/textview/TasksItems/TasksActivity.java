@@ -242,7 +242,7 @@ public class TasksActivity extends AppCompatActivity {
 
     private void chronometrStartCounting() {
 
-        chronometer.setBase(SystemClock.elapsedRealtime() - (10 * 3590 * 1000));
+        chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
 
     }
