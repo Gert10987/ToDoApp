@@ -2,7 +2,6 @@ package info.textview.DataBase;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,6 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
-
-import info.textview.DataBase.DataBaseToDo;
 import info.textview.R;
 
 /**

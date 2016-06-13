@@ -1,32 +1,19 @@
 package info.textview.TasksItems;
 
-import org.junit.Before;
 import org.junit.Test;
-
-import org.mockito.MockitoAnnotations;
 
 import info.textview.DataBase.DataBaseToDo;
 
-
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 /**
  * Created by Paweł on 2016-06-03.
  */
 public class TaskActivityTest {
 
-
-    @Before
-    public void setupAddNotePresenter() {
-        // Mockito has a very convenient way to inject mocks by using the @Mock annotation. To
-        // inject the mocks in the test the initMocks method needs to be called.
-        MockitoAnnotations.initMocks(this);
-
-
-    }
 
     @Test
     public void testGetTimeInIntegerFromString() {
@@ -46,7 +33,7 @@ public class TaskActivityTest {
 
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testForNullPointerException() {
         // create an configure mock
         DataBaseToDo dataBaseToDo = mock(DataBaseToDo.class);
@@ -55,6 +42,7 @@ public class TaskActivityTest {
         // use mock
         dataBaseToDo.setNameOfTable(null);
     }
+
 
 
 }

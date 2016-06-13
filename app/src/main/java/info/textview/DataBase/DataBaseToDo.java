@@ -16,7 +16,7 @@ import java.util.List;
 public class DataBaseToDo extends SQLiteOpenHelper {
 
     /*********
-     * DataBase
+     * DataBase Class
      ******************/
 
     private static final String DATABASE_NAME = "ToDoApp.db";
@@ -212,7 +212,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 list.add(i, cursor.getString(cursor.getColumnIndex("_id")));
-                // do what ever you want here
+
                 cursor.moveToNext();
 
                 i++;
@@ -257,12 +257,12 @@ public class DataBaseToDo extends SQLiteOpenHelper {
      * delete record
      *************/
 
-    public long deleteRecord(long word) {
+    public long deleteRecord(long id) {
 
         try {
 
             SQLiteDatabase db = getWritableDatabase();
-            db.delete(TABLE_TODO_APP, DATABASE_ID + " = " + word, null);
+            db.delete(TABLE_TODO_APP, DATABASE_ID + " = " + id, null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,7 +270,7 @@ public class DataBaseToDo extends SQLiteOpenHelper {
         }
 
 
-        return word;
+        return id;
     }
 
     public int sumColumn(){

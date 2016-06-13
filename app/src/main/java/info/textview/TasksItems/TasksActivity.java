@@ -5,31 +5,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.os.SystemClock;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.TimeZone;
-
 
 import info.textview.DataBase.CursorAdapterToDo;
 import info.textview.DataBase.DataBaseToDo;
@@ -48,10 +39,8 @@ public class TasksActivity extends AppCompatActivity {
 
     private static final int IS_DOING = 1;
 
-    private static final int TO_DO = 0;
 
     private ListView listWithData;
-    private ArrayList<String> arrayListToGetData;
     private Chronometer chronometer;
     private TextView textView;
     private Button stopCountingButton;
@@ -174,7 +163,6 @@ public class TasksActivity extends AppCompatActivity {
                 positionInListView = parent.getItemIdAtPosition(position);
 
                 setUpAlertDialogWhenStartTask(view);
-
 
 
             }
@@ -416,8 +404,6 @@ public class TasksActivity extends AppCompatActivity {
 
         dataBaseToDo.deleteRecord(id);
     }
-
-
 
 
 }

@@ -31,12 +31,11 @@ public class StartActivity extends Activity {
 
     public static final String ANDROID_METADA = "android_metadata";
 
-    GridView gridView;
-    Button button;
-    EditText editText;
-    ArrayList<String> arrayList;
-
-    DataBaseToDo dataBaseToDo;
+    private GridView gridView;
+    private Button button;
+    private EditText editText;
+    private ArrayList<String> arrayList;
+    private DataBaseToDo dataBaseToDo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +47,6 @@ public class StartActivity extends Activity {
         setUpAdapter();
         setUpGridView();
     }
-
 
 
     private ArrayAdapter setUpAdapter() {
@@ -156,7 +154,7 @@ public class StartActivity extends Activity {
 
         for(int i = 0; i < arrayList.size(); i++){
 
-            Log.d("XXX", arrayList.get(i));
+            Log.d("Name Of Table", arrayList.get(i));
 
             if(arrayList.get(i).matches(ANDROID_METADA)){
 

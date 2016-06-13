@@ -22,6 +22,7 @@
         </activity>
 
 
+
         <activity android:name=".TasksItems.TasksActivity"></activity>
         <activity android:name=".addTask.AddTaskActivity"></activity>
 

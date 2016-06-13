@@ -24,7 +24,6 @@ public class AddTaskActivity extends Activity {
     private TextView textView;
     private EditText editText;
     private String nameOfProject;
-
     private DataBaseToDo dataBaseToDo;
 
 
@@ -39,7 +38,7 @@ public class AddTaskActivity extends Activity {
 
     }
 
-    private void initDataBase(){
+    private void initDataBase() {
 
         dataBaseToDo = new DataBaseToDo(this);
         dataBaseToDo.setNameOfTable(getNameOfProject());
@@ -62,7 +61,7 @@ public class AddTaskActivity extends Activity {
 
     }
 
-    private void addTitleToSqLite(){
+    private void addTitleToSqLite() {
 
 
         dataBaseToDo.addTitle(getTitleFromEditText());
@@ -70,7 +69,7 @@ public class AddTaskActivity extends Activity {
 
     }
 
-    private String getTitleFromEditText(){
+    private String getTitleFromEditText() {
 
         String value = editText.getText().toString();
 
@@ -79,28 +78,31 @@ public class AddTaskActivity extends Activity {
 
     public void onClick(View view) {
 
-        switch (view.getId()){
+        switch (view.getId()) {
 
             case R.id.buttonAdd:
-                try{
+
+                try {
 
                     addTitleToSqLite();
                     textView.setText(getTitleFromEditText());
                     editText.setText("");
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+
                 break;
 
             case R.id.buttonNext:
-                try{
+
+                try {
 
                     Intent intent = new Intent(getApplicationContext(), TasksActivity.class);
                     intent.putExtra(NAME_OF_PROJECT_EXIST, nameOfProject);
                     startActivity(intent);
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
